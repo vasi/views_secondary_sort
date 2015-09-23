@@ -1,0 +1,100 @@
+<?php
+
+/**
+ * @file
+ * Module code for views_secondary_sort.
+ */
+
+/**
+ * Implements hook_views_api().
+ */
+function views_secondary_sort_views_api() {
+  return array('api' => 3);
+}
+
+/**
+ * Implements hook_views_plugins().
+ */
+function views_secondary_sort_views_plugins() {
+  $plugins = array();
+  $plugins['display_extender'] = array(
+    'secondary_sort' => array(
+      'title' => t('Secondary sort'),
+      'handler' => 'views_plugin_secondary_sort',
+    ),
+  );
+  return $plugins;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function views_secondary_sort_theme($existing, $type, $theme, $path) {
+  return array(
+    'views_secondary_sort' => array(
+      'render element' => 'table',
+    ),
+  );
+}
+
+/**
+ * Theme a table of secondary sorts.
+ *
+ * Inspired by field_ui's display mode form.
+ */
+function theme_views_secondary_sort(&$variables) {
+  $table = $variables['table'];
+  $header = array(t('Column'), t('Weight'), t('Order'));
+
+  $rows = array();
+  foreach ($table['#regions'] as $region_name => $region) {
+    // Add rows for the regions.
+    foreach (array('title', 'message') as $rrow) {
+      if (isset($region[$rrow])) {
+        $classes = array("views-secondary-sort-region-$rrow");
+        if ($rrow == 'message') {
+          // Does this region have anything in it?
+          $classes[] = empty($region['rows'])
+            ? 'views-secondary-sort-region-empty'
+            : 'views-secondary-sort-region-populated';
+        }
+        // Identify this region to JS.
+        $classes[] = "views-secondary-sort-region-{$region_name}-{$rrow}";
+        $rows[] = array(
+          'no_striping' => TRUE,
+          'class' => $classes,
+          'data' => array(
+            array(
+              'colspan' => count($header),
+              'data' => $region[$rrow],
+            ),
+          ),
+        );
+      }
+    }
+
+    // Add other rows.
+    foreach ($region['rows'] as $field) {
+      $elem = &$table[$field];
+      $elem['weight']['#attributes']['class'] = array('views-secondary-sort-weight');
+      $elem['order']['#attributes']['class'] = array('views-secondary-sort-order');
+      if (!$elem['#secondary_sort']) {
+        $elem['order']['#attributes']['class'][] = 'views-secondary-sort-hidden';
+      }
+
+      $row = array();
+      $row[] = drupal_render($elem['name']) . drupal_render($elem['sort']);
+      $row[] = drupal_render($elem['weight']);
+      $row[] = drupal_render($elem['order']);
+      $rows[] = array('data' => $row, 'class' => array('draggable'));
+    }
+  }
+
+  $themed_table = theme('table', array(
+    'header' => $header,
+    'rows' => $rows,
+    'attributes' => array('id' => 'views-secondary-sort'),
+  ));
+
+  return $themed_table;
+}

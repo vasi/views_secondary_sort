@@ -1,0 +1,17 @@
+/**
+ * @file
+ * CSS for views secondary sorts.
+ */
+
+.views-secondary-sort-region-title td {
+    font-weight: bold;
+}
+.views-secondary-sort-region-message td {
+    font-style: italic;
+}
+.views-secondary-sort-region-populated {
+    display: none;
+}
+.views-secondary-sort-hidden {
+    display: none;
+}

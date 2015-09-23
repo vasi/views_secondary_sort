@@ -1,0 +1,8 @@
+name = Views Secondary Sort
+description = Add secondary sorts to table views.
+package = Views
+core = 7.x
+
+dependencies[] = views
+
+files[] = plugins/views_plugin_secondary_sort.inc
