@@ -1,0 +1,8 @@
+name: 'Views Secondary Sort'
+type: module
+description: 'Secondary sorts for views tables.'
+package: Views
+version: 1.0
+core: 8.x
+dependencies:
+  - views
