@@ -1,0 +1,10 @@
+views_secondary_sort:
+  version: 1.x
+  css:
+    theme:
+      css/views_secondary_sort.theme.css: {}
+  js:
+    js/views_secondary_sort.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal.tabledrag
