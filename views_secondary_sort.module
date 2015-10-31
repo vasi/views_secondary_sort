@@ -25,7 +25,6 @@ function views_secondary_sort_theme($existing, $type, $theme, $path) {
 function theme_views_secondary_sort(&$variables) {
   $renderer =  \Drupal::service('renderer');
   $table = $variables['table'];
-  $header = array(t('Column'), t('Weight'), t('Order'));
 
   $rows = array();
   foreach ($table['#regions'] as $region_name => $region) {
@@ -71,14 +70,14 @@ function theme_views_secondary_sort(&$variables) {
     }
   }
 
-  $table = array(
+  $new_table = array(
     '#type' => 'table',
-    '#header' => $header,
+    '#header' => $table['#header'],
     '#rows' => $rows,
     '#attributes' => array('id' => 'views-secondary-sort'),
     '#tabledrag' => $table['#tabledrag'],
   );
 
-  $themed_table = $renderer->render($table);
-  return $themed_table;
+  $output = $renderer->render($new_table);
+  return $output;
 }

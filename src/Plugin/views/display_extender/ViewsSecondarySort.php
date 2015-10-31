@@ -25,7 +25,7 @@ class ViewsSecondarySort extends DisplayExtenderPluginBase {
   protected function defineOptions() {
     $options = parent::defineOptions();
 
-    $options['secondary_sort'] = ['default' => $this->t('Empty')];
+    $options['secondary_sort'] = ['default' => []];
 
     return $options;
   }
@@ -152,6 +152,11 @@ class ViewsSecondarySort extends DisplayExtenderPluginBase {
     $table['#tree'] = TRUE;
     $table['#theme'] = 'views_secondary_sort';
     $table['#regions'] = $regions;
+    $table['#header']= array(
+      $this->t('Column'),
+      $this->t('Weight'),
+      $this->t('Order')
+    );
 
     // Add rows.
     $weight = 0;
